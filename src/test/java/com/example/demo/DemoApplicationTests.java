@@ -19,16 +19,16 @@ class DemoApplicationTests {
      */
     @Test
     void floatCoverTest(){
-        byte[] bytes = float2byte(9.40646F);
+        byte[] bytes = float2bytes(9.40646F);
         System.out.println("Float -> byte[]: "+ Arrays.toString(bytes));
-        System.out.println("byte[] -> Float: "+ byte2float(bytes,0) +"\r\n");
+        System.out.println("byte[] -> Float: "+ bytes2float(bytes,0) +"\r\n");
 
-        byte[] bytes2 = HexUtils.hexStringToByteArray("DC801641");
+        byte[] bytes2 = HexUtils.hexStr2Bytes("DC801641");
         System.out.println("HEX -> byte[]: "+ Arrays.toString(bytes2));
-        System.out.println("byte[] -> HEX: "+ HexUtils.byteArray2HexString(bytes2));
+        System.out.println("byte[] -> HEX: "+ HexUtils.bytes2HexStr(bytes2));
 
-        System.out.println("Double -> HEX: "+ double2Hex(Math.PI));
-        System.out.println("HEX -> Double: "+ hex2Double("400921fb54442d18"));
+        System.out.println("Double -> HEX: "+ double2HexStr(Math.PI));
+        System.out.println("HEX -> Double: "+ hexStr2Double("400921fb54442d18"));
     }
 
     /**--------------
@@ -49,7 +49,7 @@ class DemoApplicationTests {
         byte[] bytes = ByteUtil.intToBytes(8934, ByteOrder.LITTLE_ENDIAN);
         System.out.println("int -> byte[]:"+ Arrays.toString(bytes));
         System.out.println("byte[] -> int: "+ ByteUtil.bytesToInt(bytes));
-        System.out.println("byte[] -> HexString: "+ byteArray2HexString(bytes));
+        System.out.println("byte[] -> HexString: "+ bytes2HexStr(bytes));
 
         //============= 任何编码集: 必须兼容ASCII编码表; 英文和数字只占1个字节
         // GBK(中文)/GB2312(简体中文)/BIG5(繁体中文)：中文每个字符占用2个字节
@@ -72,11 +72,11 @@ class DemoApplicationTests {
         System.out.println("short -> HexString: "+ short2HexString(a)); //FD01
         System.out.println("HexString -> short: "+ Integer.valueOf("FD01", 16).shortValue()); // -767
         // 2.number 4字节, -2147483648 ~ 2147483647
-        System.out.println("int -> HexString: "+ HexUtils.numberToHex(-767, 2)); // "fffffd01"
+        System.out.println("int -> HexString: "+ HexUtils.int2HexStr(-767, 2)); // "fffffd01"
         System.out.println("int -> HexString: "+ Integer.toUnsignedString(-767, 16)); // "fffffd01"
         System.out.println("HexString -> int: "+ Integer.parseUnsignedInt("FFFFFD01", 16)); //-767
         // 3.number 8字节, -9223372036854775808 ~ 9223372036854775807
-        System.out.println("long -> HexString: "+ HexUtils.longToHex(-9223372036854775808L,8)); //"8000000000000000"
+        System.out.println("long -> HexString: "+ HexUtils.long2HexStr(-9223372036854775808L,8)); //"8000000000000000"
         System.out.println("HexString -> long: "+ Long.parseUnsignedLong("8000000000000000",16)); //-9223372036854775808
     }
     /**

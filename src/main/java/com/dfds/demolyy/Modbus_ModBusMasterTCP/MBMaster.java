@@ -19,7 +19,6 @@ import io.netty.util.ReferenceCountUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static com.dfds.demolyy.utils.ProtocolUtils.HexUtils.byte2HexString;
 
 public class MBMaster {
     private final Logger logger = LoggerFactory.getLogger(getClass());
@@ -96,7 +95,6 @@ public class MBMaster {
                 System.out.println(ByteBufUtil.prettyHexDump(response.getRegisters()));
 
                 //返回的报文中在0到f这15个位置中，有需要的业务数据，具体获取哪个位置，取决于Slave设备的设置
-                System.out.println("address=1寄存器地址(2个字节:byte[2],byte[3]) HEX:" + byte2HexString(bytes[2]) + " " + byte2HexString(bytes[3]) + " ---> DEC:" + HexUtil.hexToInt(byte2HexString(bytes[2]) + byte2HexString(bytes[3])));
                 ReferenceCountUtil.release(response);
             } else {
                 logger.error("Error Msg ={}", ex.getMessage(), ex);

@@ -119,7 +119,7 @@ public class ExampleTCP_MasterAndSlave {
 
             // 1.获取响应的数据byte[]
             byte[] bytes = response.getBytes();
-            System.out.println("响应byte[]: "+ byteArray2HexString(bytes));
+            System.out.println("响应byte[]: "+ bytes2HexStr(bytes));
 
             // 2.获取响应的数据值
             ModbusHoldingRegisters registers = response.getHoldingRegisters();
@@ -129,8 +129,8 @@ public class ExampleTCP_MasterAndSlave {
             }
             //获取float
             System.out.println("PI is approximately equal to " + registers.getFloat64At(0));
-            System.out.println("Double -> HEX: "+ double2Hex(Math.PI));
-            System.out.println("HEX -> Double: "+ hex2Double("400921FB54442D18"));
+            System.out.println("Double -> HEX: "+ double2HexStr(Math.PI));
+            System.out.println("HEX -> Double: "+ hexStr2Double("400921FB54442D18"));
 
             master.disconnect();
             slave.shutdown();

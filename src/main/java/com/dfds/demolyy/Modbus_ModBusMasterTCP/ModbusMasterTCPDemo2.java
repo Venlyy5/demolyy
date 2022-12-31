@@ -1,6 +1,6 @@
 package com.dfds.demolyy.Modbus_ModBusMasterTCP;
 
-import com.dfds.demolyy.utils.ProtocolUtils.HexUtils2;
+import com.dfds.demolyy.utils.ProtocolUtils.HexUtils;
 import com.digitalpetri.modbus.FunctionCode;
 import com.digitalpetri.modbus.codec.Modbus;
 import com.digitalpetri.modbus.master.ModbusTcpMaster;
@@ -300,7 +300,7 @@ public class ModbusMasterTCPDemo2 {
             byte[] bytes = new byte[buf.capacity()];
             buf.readBytes(bytes, 0, buf.capacity());
             // System.out.println("bytes=" + Arrays.toString(bytes));
-            result = HexUtils2.bytes2Short(bytes, 0);
+            result = HexUtils.bytes2ShortBE(bytes);
             ReferenceCountUtil.release(readHoldingRegistersResponse);
         }
         return result;

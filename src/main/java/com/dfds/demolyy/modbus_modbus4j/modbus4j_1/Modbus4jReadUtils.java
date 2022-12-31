@@ -119,7 +119,7 @@ public class Modbus4jReadUtils {
         }
         else{
             System.out.println("获取原始byte[]: "+ Arrays.toString(response.getData()));
-            System.out.println("16进制表示: "+ HexUtils.byteArray2HexString(response.getData()));
+            System.out.println("16进制表示: "+ HexUtils.bytes2HexStr(response.getData()));
         }
     }
 

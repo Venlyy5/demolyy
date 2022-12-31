@@ -122,7 +122,7 @@ public class ModbusMasterTCPDemo {
      */
     public static boolean WriteMultipleRegisters(int address, int quantity, int unitId, float values){
         // float类型转字节数组
-        byte[] bytes = HexUtils.float2byte(values);
+        byte[] bytes = HexUtils.float2bytes(values);
         // 转netty需要的字节类型
         ByteBuf byteBuf = Unpooled.wrappedBuffer(bytes);
         // 写多个寄存器数据，数据类型由quantity（modbus地址的数量）决定，1个modbus地址是16位即2字节，float类型占4个字节即2个数量的modbus地址，double类型占8个字节即4个数量的modbus地址

@@ -60,7 +60,7 @@ public class TCPClient {
                 BufferedOutputStream bfOut = new BufferedOutputStream(socket.getOutputStream());
 
                 String hex = "000000000006010300000003";
-                bfOut.write(HexUtils.hexStringToByteArray(hex));
+                bfOut.write(HexUtils.hexStr2Bytes(hex));
                 bfOut.flush();
                 System.out.println("Send: "+ hex);
 
@@ -68,7 +68,7 @@ public class TCPClient {
                 //byte[] bytes = new byte[bfIn.available()];
                 byte[] bytes = new byte[15]; //available()有时会提前返回0,所以导致创建的接收数组大小为0.固定空间不用等待
                 bfIn.read(bytes);
-                System.out.print("Recv: "+ HexUtils.byteArray2HexString(bytes));
+                System.out.print("Recv: "+ HexUtils.bytes2HexStr(bytes));
             } finally {
                 socket.close();
             }
