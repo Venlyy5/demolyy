@@ -1,0 +1,17 @@
+spring:
+  profiles:
+    active: test
+  web:
+    resources:
+      cache:
+        period: 0
+  application:
+    name: iot-netty
+
+socket:
+  # 监听端口 8090
+  port: 8090
+  #ip地址
+  host: 127.0.0.1
+
+
