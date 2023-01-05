@@ -1,5 +1,6 @@
 package com.dfds.demolyy.enums;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -53,6 +54,10 @@ public enum EMbExceptionCode {
         this.description = description;
     }
 
+    public static EMbExceptionCode getByCode(byte code){
+        return Arrays.stream(EMbExceptionCode.values()).filter(e -> e.code==code).findFirst().orElse(null);
+    }
+
     public byte getCode() {
         return code;
     }
@@ -60,4 +65,10 @@ public enum EMbExceptionCode {
     public String getDescription() {
         return description;
     }
+
+    public static void main(String[] args) {
+        EMbExceptionCode byCode = getByCode((byte) 0x03);
+        System.out.println(byCode);
+    }
+
 }

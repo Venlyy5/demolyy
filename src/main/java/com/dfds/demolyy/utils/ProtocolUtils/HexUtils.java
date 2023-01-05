@@ -6,6 +6,7 @@ import io.netty.buffer.ByteBuf;
 import org.apache.commons.lang3.StringUtils;
 import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
+import java.util.Arrays;
 
 /**
  * @author LiYangYang
@@ -433,6 +434,8 @@ public class HexUtils {
 
     /**--------------------
      * boolean[] -> byte[]
+     * 将 boolean[] booleans = {false,true,true,false,true,false,true,true, true,false,false,false,true,false,true,false, true}
+     * 转为  byte[] = {-42, 81, 1} (HexStr: D65101)
      */
     public static byte[] booleans2bytes(boolean[] bdata) {
         int byteCount = (bdata.length + 7) / 8;

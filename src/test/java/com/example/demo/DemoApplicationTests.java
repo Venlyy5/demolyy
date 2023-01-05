@@ -2,33 +2,58 @@ package com.example.demo;
 import cn.hutool.core.util.ByteUtil;
 import cn.hutool.core.util.CharsetUtil;
 import com.dfds.demolyy.utils.ProtocolUtils.HexUtils;
+import com.dfds.demolyy.utils.iot_communicationUtils.FloatUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Test;
 
 import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import java.nio.ByteOrder;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.Arrays;
 import static com.dfds.demolyy.utils.ProtocolUtils.HexUtils.*;
+import static java.lang.Math.pow;
 
 //@SpringBootTest
 class DemoApplicationTests {
 
-    /**
-     * float,16进制,字节 转换测试
+    /**------------------------------------
+     * float精度丢失问题, double, 16进制, 字节 转换测试
      */
     @Test
     void floatCoverTest(){
-        byte[] bytes = float2bytes(9.40646F);
-        System.out.println("Float -> byte[]: "+ Arrays.toString(bytes));
-        System.out.println("byte[] -> Float: "+ bytes2float(bytes,0) +"\r\n");
+        float floatValue = 282734.22354584F;
+        //float floatValue = 2827854.224F;
+        System.out.println("把一个超过float精度的数给floatValue时, 精度就丢失了, 并非在转换时丢失: "+ floatValue);
 
-        byte[] bytes2 = HexUtils.hexStr2Bytes("DC801641");
-        System.out.println("HEX -> byte[]: "+ Arrays.toString(bytes2));
-        System.out.println("byte[] -> HEX: "+ HexUtils.bytes2HexStr(bytes2));
+        NumberFormat instance = NumberFormat.getInstance();
+        instance.setGroupingUsed(false);
+        System.out.println("NumberFormat: "+ instance.format(floatValue));
 
-        System.out.println("Double -> HEX: "+ double2HexStr(Math.PI));
-        System.out.println("HEX -> Double: "+ hexStr2Double("400921fb54442d18"));
+        DecimalFormat decimalFormat = new DecimalFormat("##########.#####");
+        System.out.println("DecimalFormat: "+ decimalFormat.format(floatValue));
+
+        BigDecimal bigDecimal = new BigDecimal(floatValue);
+        System.out.println("BigDecimal.toPlainString: "+ bigDecimal.toPlainString());
+
+        byte[] bytes = float2bytes(floatValue);
+        System.out.println("float -> byte[]: " + Arrays.toString(bytes));
+        String hexStr = bytes2HexStr(bytes); //C70D8A48
+        System.out.println("byte[] -> HexStr: " + hexStr);
+        System.out.println("HexStr -> float: "+ hexStr2Float(hexStr));
+
+        // 转换方式2
+        byte[] bytes2 = FloatUtil.toByteArray(floatValue, true);
+        System.out.println("Float -> byte3[]: "+ Arrays.toString(bytes2));
+
+        //==================  Double测试
+        byte[] doubleBytes = double2Bytes(282734.22354584D);
+        System.out.println("Double -> byte[]: "+ Arrays.toString(doubleBytes));
+        System.out.println("byte[] -> Double: "+ FloatUtil.toFloat64(doubleBytes,0,true));
+
+        System.out.println("Double -> HEX: "+ double2HexStr(282734.22354584D));
+        System.out.println("HEX -> Double: "+ hexStr2Double("411141b8e4e93360"));
     }
 
     /**--------------

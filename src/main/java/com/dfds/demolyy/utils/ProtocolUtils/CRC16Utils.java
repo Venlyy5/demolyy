@@ -6,7 +6,7 @@ package com.dfds.demolyy.utils.ProtocolUtils;
  * @date 2022/11/11
  */
 public class CRC16Utils {
- 
+
     static byte[] crc16_h = {
             (byte) 0x00, (byte) 0xC1, (byte) 0x81, (byte) 0x40, (byte) 0x01, (byte) 0xC0, (byte) 0x80, (byte) 0x41, (byte) 0x01, (byte) 0xC0, (byte) 0x80, (byte) 0x41, (byte) 0x00, (byte) 0xC1, (byte) 0x81, (byte) 0x40,
             (byte) 0x01, (byte) 0xC0, (byte) 0x80, (byte) 0x41, (byte) 0x00, (byte) 0xC1, (byte) 0x81, (byte) 0x40, (byte) 0x00, (byte) 0xC1, (byte) 0x81, (byte) 0x40, (byte) 0x01, (byte) 0xC0, (byte) 0x80, (byte) 0x41,
@@ -25,7 +25,7 @@ public class CRC16Utils {
             (byte) 0x01, (byte) 0xC0, (byte) 0x80, (byte) 0x41, (byte) 0x00, (byte) 0xC1, (byte) 0x81, (byte) 0x40, (byte) 0x00, (byte) 0xC1, (byte) 0x81, (byte) 0x40, (byte) 0x01, (byte) 0xC0, (byte) 0x80, (byte) 0x41,
             (byte) 0x00, (byte) 0xC1, (byte) 0x81, (byte) 0x40, (byte) 0x01, (byte) 0xC0, (byte) 0x80, (byte) 0x41, (byte) 0x01, (byte) 0xC0, (byte) 0x80, (byte) 0x41, (byte) 0x00, (byte) 0xC1, (byte) 0x81, (byte) 0x40
     };
- 
+
     static  byte[] crc16_l = {
             (byte) 0x00, (byte) 0xC0, (byte) 0xC1, (byte) 0x01, (byte) 0xC3, (byte) 0x03, (byte) 0x02, (byte) 0xC2, (byte) 0xC6, (byte) 0x06, (byte) 0x07, (byte) 0xC7, (byte) 0x05, (byte) 0xC5, (byte) 0xC4, (byte) 0x04,
             (byte) 0xCC, (byte) 0x0C, (byte) 0x0D, (byte) 0xCD, (byte) 0x0F, (byte) 0xCF, (byte) 0xCE, (byte) 0x0E, (byte) 0x0A, (byte) 0xCA, (byte) 0xCB, (byte) 0x0B, (byte) 0xC9, (byte) 0x09, (byte) 0x08, (byte) 0xC8,
@@ -44,7 +44,7 @@ public class CRC16Utils {
             (byte) 0x88, (byte) 0x48, (byte) 0x49, (byte) 0x89, (byte) 0x4B, (byte) 0x8B, (byte) 0x8A, (byte) 0x4A, (byte) 0x4E, (byte) 0x8E, (byte) 0x8F, (byte) 0x4F, (byte) 0x8D, (byte) 0x4D, (byte) 0x4C, (byte) 0x8C,
             (byte) 0x44, (byte) 0x84, (byte) 0x85, (byte) 0x45, (byte) 0x87, (byte) 0x47, (byte) 0x46, (byte) 0x86, (byte) 0x82, (byte) 0x42, (byte) 0x43, (byte) 0x83, (byte) 0x41, (byte) 0x81, (byte) 0x80, (byte) 0x40
     };
- 
+
     /**
      * 查表法计算CRC16校验
      * @param data 需要计算的字节数组
@@ -59,7 +59,7 @@ public class CRC16Utils {
             ucCRCLo = ucCRCHi ^ crc16_h[iIndex];
             ucCRCHi = crc16_l[iIndex];
         }
- 
+
         crc = ((ucCRCHi & 0x00ff) << 8) | (ucCRCLo & 0x00ff) & 0xffff;
         //高低位互换，输出符合相关工具对Modbus CRC16的运算
         crc = ( (crc & 0xFF00) >> 8) | ( (crc & 0x00FF ) << 8);
@@ -141,9 +141,9 @@ public class CRC16Utils {
             result = sb.replace(4 - result.length(), 4, result).toString();
         }
 
-        // 高位在前,低位在后
-        return   result.substring(0, 2) + result.substring(2, 4);
-        // 低位在前，高位在后
-        // return result.substring(2, 4) + result.substring(0, 2);
+        // 小端
+        // return   result.substring(0, 2) + result.substring(2, 4);
+        // 大端
+        return result.substring(2, 4) + result.substring(0, 2);
     }
 }

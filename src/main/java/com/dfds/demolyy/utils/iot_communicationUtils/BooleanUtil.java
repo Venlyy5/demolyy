@@ -1,6 +1,9 @@
 package com.dfds.demolyy.utils.iot_communicationUtils;
 
+import com.dfds.demolyy.utils.ProtocolUtils.HexUtils;
+
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class BooleanUtil {
@@ -9,12 +12,17 @@ public class BooleanUtil {
         // NOOP
     }
 
+    /**
+     * 获取0或1的字节
+     * @param data
+     * @return
+     */
     public static byte toByte(boolean data) {
         return setBit((byte) 0x00, 0, data);
     }
 
     /**
-     * 对字节的指定位设置1或0
+     * 对字节0的指定位设置1或0
      *
      * @param bit 位数
      * @param res true：1，false：0
@@ -25,7 +33,7 @@ public class BooleanUtil {
     }
 
     /**
-     * 对字节的指定位设置1或0
+     * 对指定字节的指定位设置1或0
      *
      * @param data 字节数据
      * @param bit  位数
@@ -54,22 +62,22 @@ public class BooleanUtil {
     }
 
     /**
-     * 提取指定数量的boolean值
-     *
-     * @param quantity 数量
-     * @param src      数据源
+     * 提取指定字节数组,指定数量的boolean值
+     * {118, 14} -> [false, true, true, false, true, true, true, false, false, false, true, true, true, true, true, true]
+     * @param quantity 读取的bool数量
+     * @param bytes  字节数组数据
      * @return boolean列表
      */
-    public static List<Boolean> byteArrayToList(int quantity, byte[] src) {
-        if (src == null) {
-            throw new NullPointerException("src");
+    public static List<Boolean> bytes2BooleanList(int quantity, byte[] bytes) {
+        if (bytes == null) {
+            throw new NullPointerException("bytes");
         }
-        if (src.length * 8 < quantity) {
-            throw new IllegalArgumentException("quantity数量操作字节数组的位总和");
+        if (quantity > bytes.length * 8) {
+            throw new IllegalArgumentException("读取的位数超过字节");
         }
         int count = 1;
         List<Boolean> res = new ArrayList<>();
-        for (byte data : src) {
+        for (byte data : bytes) {
             for (int j = 0; j < 8; j++) {
                 if (count <= quantity) {
                     res.add(BooleanUtil.getValue(data, j));
@@ -82,16 +90,19 @@ public class BooleanUtil {
 
     /**
      * 将boolean列表转换为字节数组
-     *
+     * booleanList最好为8的倍数, 否则不满8的位置默认给false
+     * [false, true, true, false, true, true, true, false, false, false, true, true, true, true, true, true] -> {118, -4}
      * @param list boolean列表
      * @return 字节数组
      */
-    public static byte[] listToByteArray(List<Boolean> list) {
+    public static byte[] booleanList2Bytes(List<Boolean> list) {
         if (list == null || list.isEmpty()) {
             throw new IllegalArgumentException("list为空");
         }
         int index = 0;
-        byte[] values = new byte[list.size() / 8 + list.size() % 8 == 0 ? 0 : 1];
+        // 如果boolList数量不是8的倍数,需要多加一个字节
+        int a = list.size() % 8 == 0 ? 0 : 1;
+        byte[] values = new byte[list.size() / 8 + a];
         for (int i = 0; i < values.length; i++) {
             for (int j = 0; j < 8; j++) {
                 if (index < list.size()) {
