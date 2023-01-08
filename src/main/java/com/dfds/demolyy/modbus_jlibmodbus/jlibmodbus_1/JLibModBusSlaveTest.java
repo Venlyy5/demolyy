@@ -25,15 +25,17 @@ public class JLibModBusSlaveTest {
 	public static void main(String[] args) {
 		try {
 			// Slave作为客户端主动连接
-			Scanner scanner = new Scanner(System.in);
-			System.out.println("请输入InetAddress:");
-			String inetAddress = scanner.nextLine();
-			System.out.println("请输入Port:");
-			int port = scanner.nextInt();
-			Socket socket = new Socket(inetAddress, port);
-			DataOutputStream out = new DataOutputStream(socket.getOutputStream());
-			out.writeUTF("Slave Connect");
-			System.out.println("[Slave作为客户端主动连接]"+ socket.getInetAddress() +":"+ socket.getPort());
+			// Scanner scanner = new Scanner(System.in);
+			// System.out.println("请输入InetAddress:");
+			// String inetAddress = scanner.nextLine();
+			// System.out.println("请输入Port:");
+			// int port = scanner.nextInt();
+			// Socket socket = new Socket(inetAddress, port);
+			// DataOutputStream out = new DataOutputStream(socket.getOutputStream());
+			// out.writeUTF("Slave Connect");
+			// System.out.println("[Slave作为客户端主动连接]"+ socket.getInetAddress() +":"+ socket.getPort());
+
+
 
 			// 设置控制台输出主机和从机命令交互日志
 			Modbus.setLogLevel(Modbus.LogLevel.LEVEL_DEBUG);

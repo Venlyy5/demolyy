@@ -1,4 +1,4 @@
-package com.uhome.cloud.common.util;
+package com.dfds.demolyy.utils.otherUtils;
 
 /**
  * @Author liuguicheng

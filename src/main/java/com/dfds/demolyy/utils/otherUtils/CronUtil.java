@@ -1,4 +1,4 @@
-package com.dfds.demolyy.utils.cronUtils;
+package com.dfds.demolyy.utils.otherUtils;
 
 import lombok.extern.slf4j.Slf4j;
 

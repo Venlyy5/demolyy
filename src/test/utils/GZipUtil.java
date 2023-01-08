@@ -1,4 +1,13 @@
-public static String compress(String str) throws Exception {
+package com.dfds.demolyy.utils.otherUtils;
+
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.util.zip.GZIPInputStream;
+import java.util.zip.GZIPOutputStream;
+
+public class GZipUtil {
+
+    public static String compress(String str) throws Exception {
         if (null == str || str.length() <= 0) {
             return str;
         }
@@ -11,6 +20,7 @@ public static String compress(String str) throws Exception {
         gzip.close();
         // 使用指定的 charsetName，通过解码字节将缓冲区内容转换为字符串
         return Base64Util.encrypt(out.toString("ISO-8859-1").getBytes());
+
     }
 
     /**
@@ -37,7 +47,7 @@ public static String compress(String str) throws Exception {
         // 使用指定的 charsetName，通过解码字节将缓冲区内容转换为字符串
         return out.toString("utf-8");
     }
-	
+
     public static void main(String[] args) throws Exception {
         String str="xyz";
         System.out.println(str.length());
@@ -48,3 +58,4 @@ public static String compress(String str) throws Exception {
         System.out.println(string1);
         System.out.println(string1.length());
     }
+}

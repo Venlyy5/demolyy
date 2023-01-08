@@ -1,4 +1,4 @@
-package com.xuecheng.commons.utils;
+package com.dfds.demolyy.utils.otherUtils;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
