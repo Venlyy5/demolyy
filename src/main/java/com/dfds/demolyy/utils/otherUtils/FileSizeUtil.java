@@ -4,7 +4,7 @@ package com.dfds.demolyy.utils.otherUtils;
  * @Author liuguicheng
  * @create 2019/6/25 10:43
  */
-public class FileUtil {
+public class FileSizeUtil {
     /**
      * 判断文件大小
      * @param len  文件长度

@@ -30,17 +30,6 @@ public class Modbus4j_Slave {
             }
         }).start();
 
-        // Slave作为客户端主动连接
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("请输入InetAddress:");
-        String inetAddress = scanner.nextLine();
-        System.out.println("请输入Port:");
-        int port = scanner.nextInt();
-        Socket socket = new Socket(inetAddress, port);
-        DataOutputStream out = new DataOutputStream(socket.getOutputStream());
-        out.writeUTF("Slave Connect");
-        System.out.println("[Slave作为客户端主动连接]"+ socket.getInetAddress() +":"+ socket.getPort());
-
         System.out.println("------------- [Slave启动] 127.0.0.1:502 -------------");
         while (true) {
             // Illegal data Address(读写地址非法): 读写的地址可能超过了目标从机能读的最大地址，或者读的地址不存在，或者一次读取超过了从机的最大读写字节数

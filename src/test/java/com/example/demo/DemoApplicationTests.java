@@ -23,8 +23,8 @@ class DemoApplicationTests {
      */
     @Test
     void floatCoverTest(){
-        float floatValue = 282734.22354584F;
-        //float floatValue = 2827854.224F;
+        //float floatValue = 4.22354584F;
+        float floatValue = 282734.22354584F;  //c70d8a48
         System.out.println("把一个超过float精度的数给floatValue时, 精度就丢失了, 并非在转换时丢失: "+ floatValue);
 
         NumberFormat instance = NumberFormat.getInstance();
@@ -52,7 +52,7 @@ class DemoApplicationTests {
         System.out.println("Double -> byte[]: "+ Arrays.toString(doubleBytes));
         System.out.println("byte[] -> Double: "+ FloatUtil.toFloat64(doubleBytes,0,true));
 
-        System.out.println("Double -> HEX: "+ double2HexStr(282734.22354584D));
+        System.out.println("Double -> HEX: "+ double2HexStr(282734.22354584D)); //411141b8e4e93360
         System.out.println("HEX -> Double: "+ hexStr2Double("411141b8e4e93360"));
     }
 

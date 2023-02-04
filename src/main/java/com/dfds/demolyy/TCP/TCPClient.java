@@ -15,7 +15,7 @@ import java.util.Scanner;
  */
 public class TCPClient {
     private String host = "localhost";
-    private int port = 502;
+    private int port = 8189;
     public TCPClient() {
     }
     public TCPClient(String host, int port) {
@@ -77,9 +77,57 @@ public class TCPClient {
         }
     }
 
+    /**------------------------
+     * 模拟ModBus设备能主动建立连接
+     */
+    public void MasterClient2(){
+        try {
+            Socket socket = new Socket(host, port);
+            try {
+                BufferedInputStream bfIn = new BufferedInputStream(socket.getInputStream());
+                BufferedOutputStream bfOut = new BufferedOutputStream(socket.getOutputStream());
+
+                //Thread.sleep(1000); // 阻塞等待客户端write数据到服务端
+                //byte[] bytes = new byte[bfIn.available()];
+                byte[] bytes = new byte[12]; //available()有时会提前返回0,所以导致创建的接收数组大小为0.固定空间不用等待
+
+                while (true){
+                    bfIn.read(bytes);
+                    String recv = HexUtils.bytes2HexStr(bytes);
+                    System.out.println("Request: "+ recv);
+
+                    // 如果收到的是输入寄存器04采集报文
+                    if (recv.equalsIgnoreCase("004C 0000 0006 01 04 0000 0009".replace(" ",""))){
+                        String hexStr = "004C 0000 0015 01 04 12 0010F447 0003640E 420E7AE1 154E FFFC 0066";
+                        bfOut.write(HexUtils.hexStr2Bytes(hexStr.replace(" ","")));
+                        bfOut.flush();
+                        System.out.println("Response: "+ hexStr);
+                    }
+
+                    // 如果收到的01线圈采集报文
+                    if (recv.equalsIgnoreCase("0DC8 0000 0006 01 01 0000 000A".replace(" ",""))){
+                        String hexStr = "0DC8 0000 0005 01 01 02 A9 02";
+                        bfOut.write(HexUtils.hexStr2Bytes(hexStr.replace(" ","")));
+                        bfOut.flush();
+                        System.out.println("Response: "+ hexStr);
+                    }
+                }
+            } finally {
+                socket.close();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
+
     public static void main(String[] args){
         //new TCPClient().chat();
-        new TCPClient().MasterClient();
+
+        //new TCPClient().MasterClient();
+
+        new TCPClient().MasterClient2();
     }
 }
 

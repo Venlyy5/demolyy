@@ -1,7 +1,7 @@
 package com.dfds.demolyy.TCP;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
+import com.dfds.demolyy.utils.ProtocolUtils.HexUtils;
+
+import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Scanner;
@@ -48,8 +48,45 @@ public class TCPServer {
             e.printStackTrace();  
         }  
     }
+
+    public void ModBusServer(){
+        try {
+            ServerSocket server = new ServerSocket(port);
+            Socket socket = server.accept();
+
+            try {
+                BufferedInputStream bfIn = new BufferedInputStream(socket.getInputStream());
+                BufferedOutputStream bfOut = new BufferedOutputStream(socket.getOutputStream());
+
+                while (true) {
+                    Thread.sleep(5000);
+                    //String hexStr = "0DC8 0000 0006 01 01 0000 000A"; //01线圈采集
+                    String hexStr = "004C 0000 0006 01 04 0000 0009"; //04输入寄存器采集
+                    System.out.println("Collect Request: "+ hexStr);
+                    bfOut.write(HexUtils.hexStr2Bytes(hexStr.replace(" ","")));
+                    bfOut.flush();
+
+                    byte[] bytes = new byte[27]; //available()有时会提前返回0,所以导致创建的接收数组大小为0.固定空间不用等待
+                    bfIn.read(bytes);
+                    System.out.println("Response: "+ HexUtils.bytes2HexStr(bytes));
+
+                }
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } finally {
+                socket.close();
+                server.close();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
     public static void main(String[] args) {
-        new TCPServer().service();
+        // 测试服务1
+        //new TCPServer().service();
+
+        // 测试服务2
+        new TCPServer().ModBusServer();
     }  
 }  
 
