@@ -166,15 +166,4 @@ public class DateUtil_3 {
         Date date = Date.from(zdt.toInstant());
         System.out.println(date.toString());//Tue Mar 27 14:17:17 CST 2018
     }
-
-    /**-----------------------------------------
-     * 测试
-     */
-    public static void main(String[] args) {
-        System.out.println(DateUtil_3.formatDate(new Date()));
-        System.out.println(DateUtil_3.formatDate(DateUtil_3.addDays(new Date(), -1)));
-
-        String s = formatCode("10,22,3,4");
-        System.out.println(s);
-    }
 }

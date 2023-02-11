@@ -1,4 +1,4 @@
-package com.dfds.demolyy.config;
+package com.dfds.demolyy.utils.otherUtils;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,17 +10,12 @@ import org.springframework.stereotype.Component;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * All rights Reserved, Designed By Fan Jun
- *
- * @author Fan Jun
- * @version 1.0
- * @since 2021/11/19 16:28
+ * Runnable不受Spring容器管理, 无法使用@Autowired, 需要手动注入bean
+ * demoService = SpringContextUtils.getApplicationContext().getBean(demoService.class);
  */
 @Component
 public class ApplicationContextHolder implements ApplicationContextAware {
-
     private static final ConcurrentHashMap<String, Object> SERVICE_FACTORY = new ConcurrentHashMap<>();
-
     private static final Logger logger = LoggerFactory.getLogger(ApplicationContextHolder.class);
 
     /**
@@ -48,6 +43,11 @@ public class ApplicationContextHolder implements ApplicationContextAware {
      */
     public static Object getBean(String name){
         return getApplicationContext().getBean(name);
+    }
+
+    @SuppressWarnings("unchecked")
+    public static <T> T getBeanByName(String name) throws BeansException {
+        return (T)applicationContext.getBean(name);
     }
 
     /**
@@ -80,20 +80,20 @@ public class ApplicationContextHolder implements ApplicationContextAware {
         return getApplicationContext().containsBean(name);
     }
 
-//    public static <T> T getService(Class<T> cls) {
-//        String clsName = cls.getName();
-//        T v = (T)SERVICE_FACTORY.get(clsName);
-//        if (v == null) {
-//            synchronized (clsName) {
-//                v = (T)SERVICE_FACTORY.get(clsName);
-//                if (v == null) {
-//                    logger.info("*****Autowire {}*****", cls);
-//                    v = DubboContext.getService(cls);
-//                    logger.info("*****{} Autowired*****", cls);
-//                    SERVICE_FACTORY.put(clsName, v);
-//                }
-//            }
-//        }
-//        return v;
-//    }
+    // public static <T> T getService(Class<T> cls) {
+    //     String clsName = cls.getName();
+    //     T v = (T)SERVICE_FACTORY.get(clsName);
+    //     if (v == null) {
+    //         synchronized (clsName) {
+    //             v = (T)SERVICE_FACTORY.get(clsName);
+    //             if (v == null) {
+    //                 logger.info("*****Autowire {}*****", cls);
+    //                 v = DubboContext.getService(cls);
+    //                 logger.info("*****{} Autowired*****", cls);
+    //                 SERVICE_FACTORY.put(clsName, v);
+    //             }
+    //         }
+    //     }
+    //     return v;
+    // }
 }

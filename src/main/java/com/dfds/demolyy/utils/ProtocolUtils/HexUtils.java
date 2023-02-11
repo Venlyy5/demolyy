@@ -124,7 +124,6 @@ public class HexUtils {
         return buffer.toString();
     }
 
-
     /**---------------
      * byte -> HexStr
      */
@@ -135,6 +134,13 @@ public class HexUtils {
         } else {
             return s;
         }
+    }
+
+    /**-------------
+     * char -> byte
+     */
+    private static byte charToByte(char c) {
+        return (byte) "0123456789ABCDEF".indexOf(c);
     }
 
     /**--------------------------------
@@ -321,7 +327,7 @@ public class HexUtils {
      */
     private static String swapOrder(String hexStr) {
         // 转为16进制字符数组
-        String[] array = formatterHex(hexStr).split(" ");
+        String[] array = formatHex(hexStr).split(" ");
         String[] swapOrder = swapOrder(array);
         StringBuffer result = new StringBuffer();
         for (String string : swapOrder) {
@@ -421,16 +427,20 @@ public class HexUtils {
     /**-------------
      * HexStr 格式化
      */
-    public static String formatterHex(String hexStr){
+    public static String formatHex(String hexStr){
         return hexStr.replaceAll("(.{2})", "$1 ");
     }
 
     /**-----------
      * Json 格式化
      */
-    public static String formatterJson(JSONObject jsonObject){
+    public static String formatJson(JSONObject jsonObject){
         return JSON.toJSONString(jsonObject, SerializerFeature.PrettyFormat, SerializerFeature.WriteMapNullValue, SerializerFeature.WriteDateUseDateFormat);
     }
+    public static String formatJson(String jsonStr){
+        return JSON.toJSONString(JSONObject.parseObject(jsonStr), SerializerFeature.PrettyFormat, SerializerFeature.WriteMapNullValue, SerializerFeature.WriteDateUseDateFormat);
+    }
+
 
     /**--------------------
      * boolean[] -> byte[]
@@ -457,7 +467,6 @@ public class HexUtils {
         return bdata;
     }
 
-    //---
     /**-------------------------------
      * short[] -> byte[] (Big-Endian)
      */

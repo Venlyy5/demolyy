@@ -410,15 +410,6 @@ public class DateUtil_2 {
         return time > endTimeL;
     }
 
-    public static void main(String[] args) {
-       /* System.out.println("本周一:"+millisToDate(DateUtil.getThisWeekMonday().getTime()));
-        System.out.println("本周日:"+millisToDate(DateUtil.getThisWeekSunday().getTime()));
-        System.out.println("上周一:"+millisToDate(DateUtil.getLastWeekMonday().getTime()));
-        System.out.println("上周日:"+millisToDate(DateUtil.getLastWeekSunday().getTime()));
-        System.out.println("下周一:"+millisToDate(DateUtil.getNextMonday().getTime()));*/
-
-    }
-
     /**
      * 获取指定日期是星期几
      * @return

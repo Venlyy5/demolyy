@@ -3,16 +3,19 @@ package com.dfds.demolyy.NettyDemo;
 import cn.hutool.cron.CronUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import javax.annotation.Resource;
 import java.net.InetSocketAddress;
 
 /**
- * 功能描述: 任务队列
+ * 功能描述: 应用启动预加载
  * springboot 启动，netty也自启动，任务定时器池也启动
  */
-@Component
+
 @Slf4j
+@Order(value = 1)
+@Component
 public class LaunchRunner implements CommandLineRunner {
     @Resource
     private NettyServer nettyServer;
@@ -21,9 +24,14 @@ public class LaunchRunner implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
+        log.info("应用启动预加载CommandLineRunner: {}", args);
+
+        // 启动定时任务
         TaskRunner();
+
+        // 启动Netty
         InetSocketAddress address = new InetSocketAddress(socketProperties.getHost(),socketProperties.getPort());
-        log.info("netty服务器启动地址:"+socketProperties.getHost());
+        log.info("netty服务器启动地址:" + socketProperties.getHost());
         nettyServer.start(address);
     }
 
