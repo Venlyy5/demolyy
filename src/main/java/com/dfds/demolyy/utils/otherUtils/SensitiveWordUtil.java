@@ -1,5 +1,4 @@
-package com.heima.common.util;
-
+package com.dfds.demolyy.utils.otherUtils;
 
 import java.util.*;
 

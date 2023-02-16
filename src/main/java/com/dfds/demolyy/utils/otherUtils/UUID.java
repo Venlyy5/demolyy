@@ -1,6 +1,6 @@
-package com.ccie.dlgs.point.common.text;
+package com.dfds.demolyy.utils.otherUtils;
 
-import com.ccie.dlgs.point.common.exception.UtilException;
+import cn.hutool.core.exceptions.UtilException;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;

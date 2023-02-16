@@ -1,4 +1,3 @@
-package com.heima.common.util;
 
 import com.hankcs.hanlp.seg.common.Term;
 import com.hankcs.hanlp.tokenizer.StandardTokenizer;

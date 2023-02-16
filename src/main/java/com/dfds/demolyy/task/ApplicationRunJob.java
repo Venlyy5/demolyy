@@ -6,8 +6,6 @@ import org.springframework.boot.ApplicationRunner;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
-
-
 /**
  * ApplicationRunner接口的方法参数ApplicationArguments 会将程序实参中“--key=value”格式的参数解析，既可以获取参数的字符串，也可以直接获取key；
  * CommandLineRunner接口的方法参数（可接收多个string的参数）只能获取参数的字符串。
