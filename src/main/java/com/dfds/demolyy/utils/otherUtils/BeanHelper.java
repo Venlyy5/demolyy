@@ -3,6 +3,7 @@ package com.dfds.demolyy.utils.otherUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -38,5 +39,19 @@ public class BeanHelper {
             log.error("【数据转换】数据转换出错，目标对象{}构造函数异常", target.getName(), e);
             throw new RuntimeException();
         }
+    }
+
+    public static <T1, T2> List<T2> listCopy(List<T1> listT1, Class<T2> t2) {
+        List<T2> listT2 = new ArrayList<T2>();
+        try {
+            for(T1 t1 : listT1){
+                T2 tx = t2.newInstance();
+                BeanUtils.copyProperties(tx, t1);
+                listT2.add(tx);
+            }
+        } catch (Exception e){
+            log.info(e.toString());
+        }
+        return listT2;
     }
 }

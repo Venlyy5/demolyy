@@ -1,22 +1,42 @@
 package com.example.demo;
 import cn.hutool.core.util.ByteUtil;
 import cn.hutool.core.util.CharsetUtil;
+import com.alibaba.fastjson.JSONObject;
 import com.dfds.demolyy.utils.ProtocolUtils.HexUtils;
 import com.dfds.demolyy.utils.iot_communicationUtils.FloatUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Test;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
+import java.net.URL;
 import java.nio.ByteOrder;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.Arrays;
+import java.util.Enumeration;
+
 import static com.dfds.demolyy.utils.ProtocolUtils.HexUtils.*;
 import static java.lang.Math.pow;
 
 //@SpringBootTest
 class DemoApplicationTests {
+
+    /**---------------------
+     * 寻找Array.class文件
+     * 类加载器的findResources(name)方法会遍历其负责加载的所有 jar 包，找到 jar 包中名称为 name 的资源文件，这里的资源可以是任何文件，甚至是.class 文件
+     */
+    @Test
+    void getSources() throws IOException {
+        // 运行后可以得到如下结果：$JAVA_HOME/jre/lib/rt.jar!/java/sql/Array.class
+        String name = "java/sql/Array.class"; // Array.class的完整路径
+        Enumeration<URL> urls = Thread.currentThread().getContextClassLoader().getResources(name);
+        while (urls.hasMoreElements()) {
+            URL url = urls.nextElement();
+            System.out.println(url.toString());
+        }
+    }
 
     /**------------------------------------
      * float精度丢失问题, double, 16进制, 字节 转换测试
@@ -139,4 +159,8 @@ class DemoApplicationTests {
     public static String short2HexString(short num) {
         return Integer.toHexString(num & 0xffff);
     }
+
+
+
+
 }
