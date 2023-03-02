@@ -1,0 +1,9 @@
+
+#如果定义 application-{profile}.properties 形式的配置文件，将被视为 profile 环境下的特定配置。
+#可以通过 spring.profiles.active 参数来激活 profile，如果没有激活的 profile,默认会加载 application-default.properties 中的配置
+
+#socket:
+#  # 监听端口
+#  port: 9998
+#  #ip地址
+#  host: 127.0.0.1

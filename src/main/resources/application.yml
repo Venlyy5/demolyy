@@ -1,12 +1,32 @@
 spring:
   profiles:
-    active: test
+    active: dev #激活application-dev.yml, 也可以以逗号分割同时激活多个 profile
+
   web:
     resources:
       cache:
         period: 0
+
   application:
     name: iot-netty
+
+  ##################### BANNER ####################
+  banner:
+    #spring.main.banner-mode = off
+    #################### Banner Text ####################
+    charset: utf-8
+    location: banner.txt  # classpath:banner.txt
+    #################### Banner Image ####################
+    ## Banner image file location (jpg or png can also beused).
+    #spring.banner.image.location = classpath:banner.gif
+    ## Width of the banner image in chars.
+    #spring.banner.image.width = 20
+    ## Height of the banner image in chars (default based on image height).
+    #spring.banner.imagespringBootBanner.height = 20
+    ## Left hand image margin in chars.
+    #spring.banner.image.margin = 2
+    ## Whether images should be inverted for dark terminal themes.
+    #spring.banner.image.invert = true
 
 socket:
   # 监听端口 8090
@@ -14,4 +34,135 @@ socket:
   #ip地址
   host: 127.0.0.1
 
+  #datasource:
+  #  driver-class-name: com.mysql.jdbc.Driver
+  #  url: jdbc:mysql://127.0.0.1:3306/iot_user?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC&useSSL=false
+  #  username: root
+  #  password: root
 
+  #redis:
+  #  host: 192.168.137.136
+  #  port: 6379
+  #  redisson:
+  #    config:
+  #      clusterServersConfig:
+  #        nodeAddresses:
+  #          - "redis://192.168.137.136:6379"
+    # Redis集群哨兵配置
+    #  sentinel:
+    #    master: mymaster   #Redis主节点
+    #    nodes:
+    #      - 192.168.137.136:26379    # 所有哨兵地址
+    #      - 192.168.137.136:26380
+    #      - 192.168.137.136:26381
+
+    # Redis分片集群配置
+    #  cluster:
+    #    nodes:
+    #      - 192.168.137.136:7001     # 所有Redis节点地址
+    #      - 192.168.137.136:7002
+    #      - 192.168.137.136:7003
+
+#mybatis-plus:
+#  configuration:
+#    # 开启Mybatis二级缓存，默认为 true。开发时不需要开启。
+#    cache-enabled: false
+#    # sql输出到控制台,方便开发调试
+#    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+#  global-config:
+#    db-config:
+#      # id-type: auto # 注解策略
+#      logic-delete-field: isDelete # 逻辑删除字段, 或者在实体类加注解 @TableLogic(value="默认值", delval="删除值")
+#      logic-delete-value: 1         # 逻辑已删除(默认为1)
+#      logic-not-delete-value: 0     # 逻辑未删除(默认为0)
+
+#seata:
+#  registry:
+#    type: nacos
+#    nacos:
+#      server-addr: 192.168.137.136:8848
+#      group: DEFAULT_GROUP
+#      namespace: ""
+#      application: seata-server
+#      username: nacos
+#      password: nacos
+#      cluster: default
+#  tx-service-group: leadnews-user-group
+#  service:
+#    vgroup-mapping:
+#      leadnews-user-group: default
+
+  #cloud:
+  #  nacos:
+  #    discovery:
+  #      server-addr: 192.168.137.136:8848
+  #
+  #  kafka:
+  #    bootstrap-servers: 192.168.137.136:9092
+  #    # 生产者: 关注作者后发送消息
+  #    producer:
+  #      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+  #      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+
+    # KafkaStream
+    #stream:
+    #  kafka:
+    #    streams:
+    #      binder:
+    #        application-id: ${spring.application.name}-kafka-stream-id
+    #        brokers: 192.168.137.136:9092
+    #        configuration:
+    #          commit.interval.ms: 5000  # 间隔5秒
+    #          default:
+    #            key.serde: org.apache.kafka.common.serialization.Serdes$StringSerde
+    #            value.serde: org.apache.kafka.common.serialization.Serdes$StringSerde
+
+  #RabbitMQ:
+  #  host: 192.168.137.136
+  #  port: 5672
+  #  username: guest
+  #  password: guest
+  #  virtual-host: /toutiao
+  #  # 开启生产者确认, simple:同步等待结果, correlated:异步回调 定义ConfirmCallback MQ返回结果后进行回调
+  #  publisher-confirm-type: correlated
+  #  # 开启生产者回执 定义回执回调 ReturnCallback
+  #  publisher-returns: true
+  #  template:
+  #    # 定义消息路由失败策略 true:调用ReturnCallback回调  false：直接丢弃消息
+  #    mandatory: true
+
+# MinIO
+#minio:
+#  enable: true  #使用MinIO开关，决定是否会加载common模块中minio相关配置类
+#  endpoint: http://192.168.137.136:9000
+#  accessKey: minio
+#  secretKey: minio123
+#  bucketName: leadnews
+#
+## 阿里云 图文检测
+#aliyun:
+#  green:
+#    enable: true  # 开启该配置后，自动配置类才会实例化内容安全相关对象
+#    accessKeyId: LTAI5t759sohwWmtA8mTpwu6
+#    accessKeySecret: trAD1GviVHI00T9x7AQDKhANr4F2PL
+#    scenes: porn,terrorism  # 检测场景：色情，暴力
+#
+## Feign超时设置
+#feign:
+#  client:
+#    config:
+#      default:
+#        connectTimeout: 60000
+#        readTimeout: 60000
+
+#yml 的list集合测试
+ymllist:
+  listName:
+    - element1 #等价于ymllist.listName[0]=element1
+    - element2
+    - element3
+
+---
+#yml 文件也可以在一个文件中完成所有 profile 的配置, 不同 profile 之间通过 --- 分割
+spring:
+  profiles: test

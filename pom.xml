@@ -295,6 +295,19 @@
 			<artifactId>Java-WebSocket</artifactId>
 			<version>1.5.3</version>
 		</dependency>
+
+		<!-- dozermapper -->
+		<dependency>
+			<groupId>org.devefx.spring.boot</groupId>
+			<artifactId>dozermapper-spring-boot-starter</artifactId>
+			<version>0.0.1</version>
+		</dependency>
+
+		<!-- validation -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-validation</artifactId>
+		</dependency>
 	</dependencies>
 
 	<!-- 打包 -->

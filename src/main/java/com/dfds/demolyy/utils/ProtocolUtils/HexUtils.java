@@ -3,10 +3,13 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import io.netty.buffer.ByteBuf;
+import javafx.util.converter.BigIntegerStringConverter;
 import org.apache.commons.lang3.StringUtils;
 import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.Arrays;
+
 
 /**
  * @author LiYangYang
@@ -14,14 +17,15 @@ import java.util.Arrays;
  */
 public class HexUtils {
 
-    /**---------------------
+    /**-----------------
      * HexStr -> uShort
      */
     public static int hexStr2uShort(String hexStr){
         return Integer.parseInt(hexStr, 16);
     }
-    /**-------------------
+    /**---------------
      * HexStr -> uint
+     * 方式2：HexStr -> int -> Integer.toUnsignedLong
      */
     public static long hexStr2uInt(String hexStr){
         return Long.parseLong(hexStr,16);
@@ -89,6 +93,7 @@ public class HexUtils {
      */
     public static String long2HexStr(Long value, int byteSize){
         String numberHex = Long.toHexString(value);
+        //String numberHex = Long.toUnsignedString(value, 16);
         int n = byteSize*2 - numberHex.length();
 
         if (n > 0){
@@ -99,6 +104,72 @@ public class HexUtils {
             return zero + numberHex;
         }
         return numberHex;
+    }
+
+    /**---------------------------------
+     * uLongStr -> Hex
+     * @param uLongStr 无符号Long字符串
+     */
+    public static String uLongStr2Hex(String uLongStr){
+        // 方式1：uLongStr -> long -> Hex
+        return long2HexStr(Long.parseUnsignedLong(uLongStr), 8);
+
+        // 方式2：uLongStr -> BigInteger -> Hex
+        //return new BigInteger(uLongStr).toString(16);
+    }
+    /**-------------------
+     * HexStr -> uLongStr
+     */
+    public static String hexStr2ULongStr(String hexStr){
+        // Hex -> Long -> uLongStr
+        return Long.toUnsignedString(Long.parseUnsignedLong(hexStr, 16));
+    }
+    /**--------------------------
+     * HexStr -> 无符号BigInteger
+     */
+    public static BigInteger hexStr2BigInteger(String hexStr){
+        return new BigInteger(hexStr, 16);
+    }
+    /**---------------------
+     * BigInteger -> HexStr
+     */
+    public static String bigInteger2HexStr(BigInteger bigInteger){
+        return bigInteger.toString(16);
+    }
+    /**----------------------------------
+     * long -> 无符号BigInteger
+     * @return (i<0时返回此负数对应的无符号值)
+     */
+    public static BigInteger long2UnsignedBigInteger(long i) {
+        if (i >= 0L)
+            return BigInteger.valueOf(i);
+        else {
+            int upper = (int) (i >>> 32);
+            int lower = (int) i;
+
+            // return (upper << 32) + lower
+            return (BigInteger.valueOf(Integer.toUnsignedLong(upper))).shiftLeft(32).
+                    add(BigInteger.valueOf(Integer.toUnsignedLong(lower)));
+        }
+    }
+    /**------------------------------------
+     * int -> 无符号long
+     * @return (i<0时返回此负数对应的无符号值)
+     */
+    public static long int2UnsignedLong(int i){
+        return Integer.toUnsignedLong(i);
+    }
+    /**-------------------------------------
+     * intStr -> int 可将无符号int范围内的值(字符串)转为 int
+     */
+    public static int intStr2Long(String intStr){
+        return Integer.parseUnsignedInt(intStr);
+    }
+    /**-------------------------------------
+     * longStr -> long 可将无符号long范围内的值(字符串)转为 long
+     */
+    public static long longStr2Long(String intStr){
+        return Long.parseUnsignedLong(intStr);
     }
 
     /**----------------
@@ -636,6 +707,23 @@ public class HexUtils {
                 | (((long) array[5] & 0xff) << 16)
                 | (((long) array[6] & 0xff) << 8)
                 | (((long) array[7] & 0xff) << 0));
+    }
+
+    /**------------------------------
+     * 这个方法保证了HashMap大小总是 2的幂次方
+     * &运算比%运算效率高，要保证hash % length = hash & (length - 1)的前提是length是2的幂次方
+     * @param cap 基础大小
+     * @return 2的幂次方
+     */
+    public static final int tableSizeFor(int cap) {
+        int MAXIMUM_CAPACITY = 1 << 30; //最大容量1073741824
+        int n = cap - 1;
+        n |= n >>> 1;
+        n |= n >>> 2;
+        n |= n >>> 4;
+        n |= n >>> 8;
+        n |= n >>> 16;
+        return (n < 0) ? 1 : (n >= MAXIMUM_CAPACITY) ? MAXIMUM_CAPACITY : n + 1;
     }
 }
 

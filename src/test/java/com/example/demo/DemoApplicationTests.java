@@ -1,7 +1,6 @@
 package com.example.demo;
 import cn.hutool.core.util.ByteUtil;
 import cn.hutool.core.util.CharsetUtil;
-import com.alibaba.fastjson.JSONObject;
 import com.dfds.demolyy.utils.ProtocolUtils.HexUtils;
 import com.dfds.demolyy.utils.iot_communicationUtils.FloatUtil;
 import org.apache.commons.lang3.StringUtils;
@@ -9,6 +8,9 @@ import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.net.URL;
 import java.nio.ByteOrder;
@@ -16,13 +18,88 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.Arrays;
 import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.concurrent.*;
 
 import static com.dfds.demolyy.utils.ProtocolUtils.HexUtils.*;
+import static com.sun.xml.internal.fastinfoset.util.ValueArray.MAXIMUM_CAPACITY;
 import static java.lang.Math.pow;
 
 //@SpringBootTest
 class DemoApplicationTests {
 
+    @Test
+    void test6(){
+
+    }
+
+    @Test
+    void test5(){
+        // 基本类型  栈
+        int a = 5;
+        int b = 5;
+        System.out.println(a==b);
+
+        // 包装类型  堆
+        Integer integerA = new Integer(4);
+        Integer integerB = new Integer(4);
+        System.out.println(integerA == integerB);
+        System.out.println(integerA.equals(integerB));
+    }
+
+    /**-----------------------------
+     * 反射测试
+     * 在运行状态中，对任意一个类，都能知道这个类的所有属性和方法，对任意一个对象，都能 调用它的任意一个方法和属性。这种能动态获取信息及动态调用对象方法的功能称为 java 语言的反射机制。
+     * 反射的作用：开发过程中，经常会遇到某个类的某个成员变量、方法或属性是私有的，或只 对系统应用开放，这里就可以利用 java 的反射机制通过反射来获取所需的私有成员或是方 法。
+     */
+    @Test
+    void reflectionTest() throws Exception {
+        // 1.获取类的 Class 对象实例
+        Class<?> clz = Class.forName("com/example/demo/ULongTest.java");
+        // 2.根据Class对象实例获取 Constructor 对象
+        Constructor appConstructor = clz.getConstructor();
+        // 3.使用 Constructor 对象的 newInstance 方法获取反射类对象
+        Object appleObj = appConstructor.newInstance();
+        // 4.获取方法的Method对象
+        Method method = clz.getMethod("MaxAndMin"); // 若有参数，还要顺序列出参数类型
+
+        // 5.利用invoke方法调用方法
+        method.invoke(appleObj);// 若有参数，还要顺序填入参数
+
+        //通过 getFields()可以获取 Class 类的属性，但无法获取私有属性，没有 Declared 修饰的只能用来反射公有的方法
+        Field[] fields = clz.getFields();
+        System.out.println(Arrays.toString(fields));
+        //而 getDeclaredFields()可 以获取到包括私有属性在内的所有属性。带有 Declared 修饰的方法可以反射到私有的方法
+        Field[] declaredFields = clz.getDeclaredFields();
+        System.out.println(Arrays.toString(declaredFields));
+    }
+
+    /**
+     * 创建线程测试
+     */
+    @Test
+    void threadTest(){
+        System.out.println(Thread.currentThread().getId());
+
+        // 1.匿名内部类方式
+        new Thread(){
+            @Override
+            public void run() {
+                System.out.println(Thread.currentThread().getId());
+            }
+        }.start();
+
+        // 2.线程池的实现(java.util.concurrent.Executor接口)
+        ExecutorService executorService = Executors.newFixedThreadPool(5);
+        executorService.execute(new Runnable() {
+            @Override
+            public void run() {
+                System.out.println(Thread.currentThread().getId());
+            }
+        });
+        executorService.shutdown();
+    }
     /**---------------------
      * 寻找Array.class文件
      * 类加载器的findResources(name)方法会遍历其负责加载的所有 jar 包，找到 jar 包中名称为 name 的资源文件，这里的资源可以是任何文件，甚至是.class 文件

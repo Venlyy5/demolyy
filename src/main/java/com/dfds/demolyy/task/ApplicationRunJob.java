@@ -7,8 +7,9 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 /**
- * ApplicationRunner接口的方法参数ApplicationArguments 会将程序实参中“--key=value”格式的参数解析，既可以获取参数的字符串，也可以直接获取key；
- * CommandLineRunner接口的方法参数（可接收多个string的参数）只能获取参数的字符串。
+ * ApplicationRunner 和 CommandLineRunner 的区别就是封装参数的形式不一样，ApplicationRunner将参数封装到ApplicationArguments类中，而CommandLineRunner 将参数传到String可变数组中
+ * ApplicationRunner将参数封装到ApplicationArguments类中，可以解析“--key=value”格式的参数，既可以获取参数的字符串，也可以直接获取key；
+ * CommandLineRunner将参数传到String可变数组中，只能获取参数的字符串。
  *
  * 在applicationContext容器加载完成之后，会调用SpringApplication类的callRunners(),
  * 该方法中会获取所有实现了ApplicationRunner和CommandLineRunner的接口bean，然后依次执行对应的run方法，并且是在同一个线程中执行。
