@@ -16,22 +16,85 @@ import java.net.URL;
 import java.nio.ByteOrder;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
-import java.util.Arrays;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.LinkedList;
+import java.util.*;
 import java.util.concurrent.*;
-
 import static com.dfds.demolyy.utils.ProtocolUtils.HexUtils.*;
-import static com.sun.xml.internal.fastinfoset.util.ValueArray.MAXIMUM_CAPACITY;
-import static java.lang.Math.pow;
 
 //@SpringBootTest
 class DemoApplicationTests {
 
+    /**------------------------
+     * CyclicBarrier相互等待测试
+     * 可以让多个线程之间相互等待，直到所有的线程都执行完任务以后，然后在继续执行下一个步骤（也可以直接结束，如果继续执行下一批任务的话，则这个CyclicBarrier是可以被重复使用的)。
+     *
+     * 使用场景：
+     * 适用于你希望创建一组任务，他们可以并行工作，然后在执行下一个步骤之前互相等待到全部执行完当前的任务，然后在去执行下个任务。
+     *
+     * CyclicBarrier和CountDownLatch的区别：
+     * CountDownLatch是多个线或一个线程等待其他多个或者一个线程。而CyclicBarrier是多个线程之间互相等待
+     * CountDownLatch没法循环使用，而CyclicBarrier可以重复使用。
+     * CountDownLatch底层使用的技术是AQS+CAS实现的。而CyclicBarrier使用的是条件变量
+     */
     @Test
-    void test6(){
+    void cyclicBarrierTest(){
+        //每一轮的三个线程都会相互等待，直到都执行了await()。然后再开始第二轮...
+        //CyclicBarrier cyclicBarrier = new CyclicBarrier(3);
+        CyclicBarrier cyclicBarrier = new CyclicBarrier(3, ()->{
+            System.out.println("比赛结束，开始中场休息1秒");
+        });
 
+        new Thread(()->{
+            for (int i = 1; i <= 3; i++) {
+                System.out.println("第一线程 "+ i + "号成员执行完毕");
+                try {cyclicBarrier.await();} catch (Exception e) {e.printStackTrace();}
+            }
+        }).start();
+
+        new Thread(()->{
+            for (int i = 1; i <= 3; i++) {
+                System.out.println("第二线程 "+ i + "号成员执行完毕");
+                try {cyclicBarrier.await();} catch (Exception e) {e.printStackTrace();}
+            }
+        }).start();
+
+        new Thread(()->{
+            for (int i = 1; i <= 3; i++) {
+                System.out.println("第三线程 "+ i + "号成员执行完毕");
+                try {cyclicBarrier.await();} catch (Exception e) {e.printStackTrace();}
+            }
+        }).start();
+    }
+
+    /**-----------------------------------------
+     * 用两个栈来实现一个队列，完成队列的Push和Pop操作。队列中的元素为int类型。
+     */
+    @Test
+    void stackTest(){
+        Stack<Integer> stack1 = new Stack<>();
+        Stack<Integer> stack2 = new Stack<>();
+
+        // push时放入stack1
+        stack1.push(1);
+        stack1.push(2);
+        stack1.push(3);
+        System.out.println("stack1: "+ stack1);
+
+        //如果两个队列都为空则抛出异常，说明用户没有push进任何元素
+        if (stack1.empty() && stack2.empty ()){
+            throw new RuntimeException("Queue is empty!");
+        }
+
+        //如果stack2为空，将stack1的元素按后进先出push进stack2里面
+        if (stack2.empty()){
+            while(!stack1.empty()){
+                stack2.push(stack1.pop());
+            }
+        }
+        System.out.println("stack2: "+ stack2);
+        //队列（先进先出）：stack2执行pop()就是按stack1 push()的顺序123
+        while (!stack2.empty()){
+            System.out.print(stack2.pop() +" ");
+        }
     }
 
     @Test
@@ -46,6 +109,9 @@ class DemoApplicationTests {
         Integer integerB = new Integer(4);
         System.out.println(integerA == integerB);
         System.out.println(integerA.equals(integerB));
+
+        // 自动拆箱
+        int i = integerA + integerB;
     }
 
     /**-----------------------------
@@ -59,6 +125,7 @@ class DemoApplicationTests {
         Class<?> clz = Class.forName("com/example/demo/ULongTest.java");
         // 2.根据Class对象实例获取 Constructor 对象
         Constructor appConstructor = clz.getConstructor();
+        //appConstructor.setAccessible(true); //设置强制访问
         // 3.使用 Constructor 对象的 newInstance 方法获取反射类对象
         Object appleObj = appConstructor.newInstance();
         // 4.获取方法的Method对象
@@ -73,6 +140,18 @@ class DemoApplicationTests {
         //而 getDeclaredFields()可 以获取到包括私有属性在内的所有属性。带有 Declared 修饰的方法可以反射到私有的方法
         Field[] declaredFields = clz.getDeclaredFields();
         System.out.println(Arrays.toString(declaredFields));
+
+
+        //===============================================
+        List<Integer> list = new ArrayList<>();
+        list.add(12);
+        //list.add("a"); //这⾥直接添加字符串会报错
+
+        Class<? extends List> clazz = list.getClass();
+        Method add = clazz.getDeclaredMethod("add", Object.class);
+        // 但是通过反射添加，是可以的。 类型擦除：Java是伪泛型，在编译期间，所有泛型信息都会被擦除掉。
+        add.invoke(list, "无视泛型添加字符串");
+        System.out.println(list);
     }
 
     /**
@@ -191,7 +270,7 @@ class DemoApplicationTests {
         //如果为 有符号
         // 1.number 2字节, -32768 ~ 32767
         short a = -767;
-        System.out.println("short -> HexString: "+ short2HexString(a)); //FD01
+        System.out.println("short -> HexString: "+ HexUtils.short2HexStr(a)); //FD01
         System.out.println("HexString -> short: "+ Integer.valueOf("FD01", 16).shortValue()); // -767
         // 2.number 4字节, -2147483648 ~ 2147483647
         System.out.println("int -> HexString: "+ HexUtils.int2HexStr(-767, 2)); // "fffffd01"
@@ -201,43 +280,4 @@ class DemoApplicationTests {
         System.out.println("long -> HexString: "+ HexUtils.long2HexStr(-9223372036854775808L,8)); //"8000000000000000"
         System.out.println("HexString -> long: "+ Long.parseUnsignedLong("8000000000000000",16)); //-9223372036854775808
     }
-    /**
-     * ===================================
-     * 8bit unsigned integer －－－> short
-     * 8bit signed integer －－－> byte
-     * 16bit unsigned integer －－－> int
-     * 16bit signed integer －－－> short
-     * 32bit unsigned integer －－－> long
-     * 32bit signed integer －－－> int
-     */
-    public static int getUnsignedByte(byte data) {      //将data字节型数据转换为0~255 (0xFF 即BYTE)。
-        return data & 0x0FF;
-    }
-
-    public static int getUnsignedShort(short data) {      //将data字节型数据转换为0~65535 (0xFFFF 即 WORD)。
-        return data & 0x0FFFF;
-    }
-
-    public static long getUnsignedInt(int data) {     //将int数据转换为0~4294967295 (0xFFFFFFFF即DWORD)。
-        return data & 0x0FFFFFFFF;
-    }
-
-
-    /**---------------------
-     * HexString -> short
-     */
-    public static short HexString2Short(String numberHex){
-        return Integer.valueOf(numberHex,16).shortValue();
-    }
-    /**
-     * ---------------------
-     * short -> HexString
-     */
-    public static String short2HexString(short num) {
-        return Integer.toHexString(num & 0xffff);
-    }
-
-
-
-
 }

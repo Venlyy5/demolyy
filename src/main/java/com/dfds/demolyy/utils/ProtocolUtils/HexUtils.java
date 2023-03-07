@@ -54,7 +54,7 @@ public class HexUtils {
     }
 
     /**----------------------
-     * short -> HexStr 有符号
+     * 有符号short -> HexStr
      */
     public static String short2HexStr(short shortValue){
         String shortHex = Integer.toHexString(shortValue & 0xffff);
@@ -397,7 +397,6 @@ public class HexUtils {
      * 十六进制字符串反序: AB CD EF GH ->GH EF CD AB
      */
     private static String swapOrder(String hexStr) {
-        // 转为16进制字符数组
         String[] array = formatHex(hexStr).split(" ");
         String[] swapOrder = swapOrder(array);
         StringBuffer result = new StringBuffer();
@@ -714,9 +713,13 @@ public class HexUtils {
      * &运算比%运算效率高，要保证hash % length = hash & (length - 1)的前提是length是2的幂次方
      * @param cap 基础大小
      * @return 2的幂次方
+     *
+     * “<<”:左移运算符，等同于乘2的n次方（x << n 等同于 x * 2^n）
+     * “>>”:右移运算符，等同于除2的次方（x >> n 等同于 x / 2^n）
+     * “>>>”无符号右移运算符，不管移动前最高位是0还是1，右移后左侧产生的空位部分都以0来填充。与>>类似。
      */
     public static final int tableSizeFor(int cap) {
-        int MAXIMUM_CAPACITY = 1 << 30; //最大容量1073741824
+        int MAXIMUM_CAPACITY = 1 << 30; //最大容量2^30(1073741824)
         int n = cap - 1;
         n |= n >>> 1;
         n |= n >>> 2;
@@ -724,6 +727,14 @@ public class HexUtils {
         n |= n >>> 8;
         n |= n >>> 16;
         return (n < 0) ? 1 : (n >= MAXIMUM_CAPACITY) ? MAXIMUM_CAPACITY : n + 1;
+    }
+
+    /**----------------
+     * 数字字符 -> 字面值
+     * '0' -> 0，而不是ASCII码值
+     */
+    public static int char2Int(char ch){
+        return ch - '0';
     }
 }
 

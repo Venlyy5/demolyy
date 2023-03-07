@@ -15,9 +15,12 @@ public class EchoClient {
     private final static int PORT = 8080;
  
     public static void start() {
+        // 客户端只需一个EventLoopGroup
         EventLoopGroup group = new NioEventLoopGroup();
+
         Bootstrap bootstrap = new Bootstrap();
         bootstrap.group(group)
+                // 指定Channel为 客户端端NIO模型
                 .channel(NioSocketChannel.class)
                 .remoteAddress(new InetSocketAddress(HOST, PORT))
                 .handler(new ChannelInitializer<SocketChannel>() {
@@ -26,8 +29,17 @@ public class EchoClient {
                         socketChannel.pipeline().addLast(new EchoClientHandler());
                     }
                 });
+
+        // 连接，可以通过addListener()监听到连接是否成功
         try {
-            ChannelFuture f = bootstrap.connect().sync();
+            ChannelFuture f = bootstrap.connect().addListener(future -> {
+                if (future.isSuccess()){
+                    System.out.println("Connect Success!");
+                }else {
+                    System.out.println("Connect Fail!");
+                }
+            }).sync();
+
             f.channel().closeFuture().sync();
         } catch (InterruptedException e) {
             e.printStackTrace();
